@@ -1,0 +1,55 @@
+@@startuml
+
+entity user {
+    id
+    --
+    name
+}
+
+
+entity channel {
+    id
+    --
+    name
+    work_space_id
+}
+
+entity work_space {
+    id
+    --
+    name
+}
+
+entity message {
+    id
+    --
+    sender_id (FK)
+    channel_id (FK)
+    message_body
+    created_at
+    modified_at
+    parent_message_id
+}
+
+entity channel_member {
+    id
+    --
+    channel_id (FK)
+    user_id (FK)
+}
+
+entity channel_workspace_relation {
+    id
+    --
+    channel_id (FK)
+    workspace_id (FK)
+}
+
+entity workspace_member {
+    id
+    --
+    workspace_id (FK)
+    user_id (FK)
+}
+
+@@enduml
