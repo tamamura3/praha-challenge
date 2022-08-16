@@ -14,7 +14,7 @@ entity channel {
     work_space_id
 }
 
-entity work_space {
+entity workspace {
     id
     --
     name
@@ -51,5 +51,15 @@ entity workspace_member {
     workspace_id (FK)
     user_id (FK)
 }
+
+user ||-l-o{ message
+user ||--o{ channel_member
+user ||-r-o{ workspace_member
+channel ||-r-o{ channel_member
+channel ||-u-o{ message
+channel ||--|| workspace
+channel ||--o{ channel_workspace_relation
+workspace ||-l-o{ channel_workspace_relation
+workspace ||--o| workspace_member
 
 @@enduml
