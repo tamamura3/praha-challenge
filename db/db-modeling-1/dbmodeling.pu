@@ -1,0 +1,68 @@
+@startuml
+entity menu{
+    id
+    --
+    name
+    menu_category_id (FK)
+    menu_price_id (FK)
+    can_takeout
+}
+
+entity set_menu_detail {
+    id
+    --
+    menu_id (FK)
+    set_menu_id (FK)
+}
+
+entity menu_genre {
+    id
+    --
+    name
+}
+
+entity menu_category {
+    id
+    --
+    name
+    menu_genre_id (FK)
+}
+
+entity menu_price {
+    id
+    --
+    menu_id (FK)
+    price
+    start_date
+    end_date
+}
+
+entity order{
+    id
+    --
+    customer_name
+    customer_phone_number
+    payment_status
+    ordered_at
+    notes
+    is_eatin
+}
+
+entity order_detail{
+    id
+    --
+    order_id（FK）
+    menu_id (FK)
+    quantity
+    is_sabinuki
+    rice_size
+}
+
+menu }|--|| menu_category
+menu ||--|{ menu_price
+menu ||--o{ order_detail
+menu ||--|{ set_menu_detail
+order ||--o{ order_detail
+menu_genre ||--|{ menu_category
+
+@enduml
