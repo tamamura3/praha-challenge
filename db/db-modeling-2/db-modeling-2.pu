@@ -57,9 +57,8 @@ user ||--o{ channel_member
 user ||-r-o{ workspace_member
 channel ||-r-o{ channel_member
 channel ||-u-o{ message
-channel ||--|| workspace
 channel ||--o{ channel_workspace_relation
 workspace ||-l-o{ channel_workspace_relation
-workspace ||--o| workspace_member
+workspace ||-u-o| workspace_member
 
 @@enduml
