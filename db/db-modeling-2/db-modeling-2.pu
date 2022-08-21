@@ -31,21 +31,15 @@ entity message {
     parent_message_id
 }
 
-entity channel_member {
+entity channel_user {
     id
     --
     channel_id (FK)
     user_id (FK)
 }
 
-entity channel_workspace_relation {
-    id
-    --
-    channel_id (FK)
-    workspace_id (FK)
-}
 
-entity workspace_member {
+entity workspace_user {
     id
     --
     workspace_id (FK)
@@ -53,12 +47,10 @@ entity workspace_member {
 }
 
 user ||-l-o{ message
-user ||--o{ channel_member
-user ||-r-o{ workspace_member
-channel ||-r-o{ channel_member
+user ||--o{ channel_user
+user ||-r-o{ workspace_user
+channel ||-r-o{ channel_user
 channel ||-u-o{ message
-channel ||--o{ channel_workspace_relation
-workspace ||-l-o{ channel_workspace_relation
-workspace ||-u-o| workspace_member
+workspace ||-u-o| workspace_user
 
 @@enduml
