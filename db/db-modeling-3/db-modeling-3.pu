@@ -1,0 +1,61 @@
+@@startuml
+
+hide Circle
+
+entity Document {
+    id
+    --
+    name
+    body
+    directory_id
+    sort_order_id
+    create_user_id
+    last_modify_user_id
+    created_at
+    last_modified_at
+}
+
+entity DocumentHistory {
+    id
+    --
+    document_id
+    name
+    body
+    modify_user_id
+    modified_at
+}
+note right: 変更されるごとに\nレコードが作成される
+
+entity Directory {
+    id
+    --
+    name
+    parent_directory_id
+    create_user_id
+    modify_user_id
+    created_at
+    modified_at
+}
+note right: ルートディレクトリは\nparent_directory_idにnullを設定
+
+entity User {
+    id
+    --
+    name
+}
+
+entity SortOrder {
+    id
+    --
+    name
+}
+note right: NameAsc、NameDesc、\nCreatedAtAsc、CreatedAtDescなど\nソート順を持つ
+
+Document ||--o{ DocumentHistory
+Document }|--|| Directory
+Document }o--|{ User
+Document }o--|| SortOrder
+DocumentHistory }o-l-|{ User
+
+
+@@enduml
