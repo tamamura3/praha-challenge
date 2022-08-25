@@ -30,7 +30,7 @@ https://dirtsimple.org/2010/11/simplest-way-to-do-tree-based-queries.html#:~:tex
 select D.name from Directory D join DirectoryClosure DC on D.id = DC.child_id where DC.parent_id = '100';  
 DirectoryClosureが先ほどの別テーブル、クロージャーテーブルと呼ばれるもの。この２つのテーブルのみ結合すればで済む。  
 これは検索のディレクトリがどれだけ深くなってもこれ以上結合が増えないので、親のidを持たせる方法の結合が多くなる問題は解決できる。  
-レコード削除の問題も、クロージャーテーブルにすべての関係が記録されているので、例えば子を削除したとしても、孫に対するレコード更新は必要だが制約が無いので削除しやすい。
+レコード削除の問題も、クロージャーテーブルにすべての関係が記録されているので、例えば子を削除したとしても、孫に対するレコード更新は必要だが制約が無いので削除しやすい
 
 
 
