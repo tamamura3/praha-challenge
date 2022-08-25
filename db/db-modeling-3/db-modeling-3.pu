@@ -29,14 +29,12 @@ entity Directory {
     id
     --
     name
-    parent_directory_id (FK)
     sort_order_id (FK)
     create_user_id (FK)
     modify_user_id (FK)
     created_at
     modified_at
 }
-note right: ルートディレクトリは\nparent_directory_idにnullを設定
 
 entity DirectoryClosure {
     id
