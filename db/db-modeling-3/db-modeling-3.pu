@@ -38,6 +38,14 @@ entity Directory {
 }
 note right: ルートディレクトリは\nparent_directory_idにnullを設定
 
+entity DirectoryClosure {
+    id
+    --
+    parent_id
+    child_id
+}
+note right: 閉包テーブル\nディレクトリの親子関係をすべて記録する 
+
 entity User {
     id
     --
@@ -55,6 +63,7 @@ Document ||--o{ DocumentHistory
 Document }|--|| Directory
 Document }o--|{ User
 Directory }o--|| SortOrder
+Directory }|--|{ DirectoryClosure
 DocumentHistory }o-l-|{ User
 
 
