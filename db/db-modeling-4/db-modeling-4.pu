@@ -1,0 +1,43 @@
+@@@startuml
+
+hide Circle
+
+entity User {
+    id
+    --
+    name
+    team_id
+    team_name
+    access_token
+}
+
+entity Message {
+    id
+    --
+    body
+    sender_id
+    reciever_id
+}
+
+entity RecieverInfo{
+    id
+    --
+    message_id
+    reciever_id
+}
+
+entity Reminder {
+    id
+    --
+    message_id
+    interval
+    interval_value
+    sending_at
+}
+note right: sending_atには次に送る日時\nintervalは「X日おき」 という情報\ninterval_valueは「X」が入る
+
+User -- Message
+User -- RecieverInfo
+Reminder -- Message
+
+@@@enduml
