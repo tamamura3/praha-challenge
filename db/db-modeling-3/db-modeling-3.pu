@@ -7,9 +7,10 @@ entity Document {
     --
     name
     body
-    directory_id
-    create_user_id
-    last_modify_user_id
+    order
+    directory_id (FK)
+    create_user_id (FK)
+    last_modify_user_id (FK)
     created_at
     last_modified_at
 }
@@ -17,10 +18,10 @@ entity Document {
 entity DocumentHistory {
     id
     --
-    document_id
+    document_id (FK)
     name
     body
-    modify_user_id
+    modify_user_id (FK)
     modified_at
 }
 note right: 変更されるごとに\nレコードが作成される
@@ -29,20 +30,17 @@ entity Directory {
     id
     --
     name
-    parent_directory_id
-    sort_order_id
-    create_user_id
-    modify_user_id
+    create_user_id (FK)
+    modify_user_id (FK)
     created_at
     modified_at
 }
-note right: ルートディレクトリは\nparent_directory_idにnullを設定
 
 entity DirectoryClosure {
     id
     --
-    parent_id
-    child_id
+    parent_id (FK)
+    child_id (FK)
 }
 note right: 閉包テーブル\nディレクトリの親子関係をすべて記録する 
 
@@ -52,17 +50,9 @@ entity User {
     name
 }
 
-entity SortOrder {
-    id
-    --
-    name
-}
-note right: NameAsc、NameDesc、\nCreatedAtAsc、CreatedAtDescなど\nソート順を持つ
-
 Document ||--o{ DocumentHistory
 Document }|--|| Directory
 Document }o--|{ User
-Directory }o--|| SortOrder
 Directory }|--|{ DirectoryClosure
 DocumentHistory }o-l-|{ User
 
