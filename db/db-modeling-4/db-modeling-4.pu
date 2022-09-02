@@ -15,29 +15,38 @@ entity Message {
     id
     --
     body
-    sender_id
-    reciever_id
+    sender_id (FK)
+    recipient_id (FK)
+    channel_id
 }
 
-entity RecieverInfo{
+entity Recipient {
     id
     --
-    message_id
-    reciever_id
+    message_id (FK)
+    user_id (FK)
 }
 
 entity Reminder {
     id
     --
-    message_id
-    interval
-    interval_value
-    sending_at
+    message_id (FK)
+    reminder_frequency_id (FK)
+    reminder_frequency_value
+    next_remind_date
+    completed_at
 }
-note right: sending_atには次に送る日時\nintervalは「X日おき」 という情報\ninterval_valueは「X」が入る
 
-User -- Message
-User -- RecieverInfo
-Reminder -- Message
+entity ReminderFrequency {
+    id
+    --
+    name
+}
+
+User ||--o{ Message
+Message }|--|{ Recipient
+User ||--|| Recipient
+Reminder ||--|| Message
+Reminder }|--|| ReminderFrequency
 
 @@@enduml
