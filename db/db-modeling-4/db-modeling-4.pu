@@ -19,12 +19,12 @@ entity Message {
     recipient_id (FK)
     channel_id
 }
+note right: sender_idはUser.idを参照\nrecipient_idはRecipient.idを参照
 
 entity Recipient {
-    id
-    --
     message_id (FK)
     user_id (FK)
+    --
 }
 
 entity Reminder {
@@ -44,8 +44,8 @@ entity ReminderFrequency {
 }
 
 User ||--o{ Message
-Message }|--|{ Recipient
-User ||--|| Recipient
+Message ||--|{ Recipient
+User ||--|{ Recipient
 Reminder ||--|| Message
 Reminder }|--|| ReminderFrequency
 
