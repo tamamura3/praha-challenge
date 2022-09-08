@@ -1,0 +1,26 @@
+@@@startuml
+
+hide Circle
+
+entity Article{
+    id
+    --
+    title
+    body
+    created_at
+    created_by
+    last_modified_at
+    last_modified_by
+}
+
+entity ArticleHistory {
+    id 
+    --
+    title
+    body
+    modified_by
+    modified_at
+}
+
+
+@@@enduml
