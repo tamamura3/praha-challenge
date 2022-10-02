@@ -1,0 +1,30 @@
+@@@startuml test
+
+entity Manga {
+    id
+    --
+    name
+}
+
+entity Novel {
+    id
+    --
+    name
+}
+
+entity BookComment {
+    book_id [FK]
+    comment_id [FK]
+}
+
+entity Comment {
+    id
+    --
+    text
+}
+
+Manga ||--o{ BookComment
+Novel ||--o{ BookComment
+BookComment }o--|| Comment
+
+@@@enduml
