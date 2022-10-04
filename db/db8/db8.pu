@@ -12,8 +12,13 @@ entity Novel {
     name
 }
 
-entity BookComment {
-    book_id [FK]
+entity MangaComment{
+    manga_id [FK]
+    comment_id [FK]
+}
+
+entity NovelComment {
+    novel_id [FK]
     comment_id [FK]
 }
 
@@ -23,8 +28,9 @@ entity Comment {
     text
 }
 
-Manga ||--o{ BookComment
-Novel ||--o{ BookComment
-BookComment }o--|| Comment
+Manga ||--o{ MangaComment
+Novel ||--o{ NovelComment
+Comment ||--|| MangaComment
+Comment ||--|| NovelComment
 
 @@@enduml
