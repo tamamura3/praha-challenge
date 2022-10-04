@@ -10,30 +10,32 @@
 ![](db8.png)
 
 ## SQL
--- 漫画一覧と各コメントを取得
-SELECT 
- manga.id,
- manga.name,
- comment.text
-FROM manga 
-LEFT JOIN manga_comment
-on manga.id = manga_comment.manga_id
-LEFT JOIN comment
-on manga_comment.comment_id = comment.id;
+-- 漫画一覧と各コメントを取得  
+SELECT   
+ manga.id,  
+ manga.name,  
+ comment.text  
+FROM manga   
+LEFT JOIN manga_comment  
+on manga.id = manga_comment.manga_id  
+LEFT JOIN comment  
+on manga_comment.comment_id = comment.id;  
 
--- # id, name, text
--- '1', 'HUNTER HUNTER', 'It\'s the best'
--- '2', 'JOJO', 'It\'s okay'
--- '2', 'JOJO', 'I want beer'
--- '3', 'NARUTO', NULL
+-- 結果  
+-- # id, name, text  
+-- '1', 'HUNTER HUNTER', 'It\'s the best'  
+-- '2', 'JOJO', 'It\'s okay'  
+-- '2', 'JOJO', 'I want beer'  
+-- '3', 'NARUTO', NULL  
 
--- 小説をすべて検索
-select * from novel;
+-- 小説をすべて検索  
+select * from novel;  
 
--- # id, name
--- '1', 'Harry Potter'
--- '2', 'Mujuryoku Piero'
--- '3', 'The Lord of the Rings'
+-- 結果  
+-- # id, name  
+-- '1', 'Harry Potter'  
+-- '2', 'Mujuryoku Piero'  
+-- '3', 'The Lord of the Rings'  
 
 
 # 課題3
