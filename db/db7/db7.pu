@@ -1,0 +1,25 @@
+@@@startuml
+
+hide Circle
+
+entity Post {
+    id [PK]
+    --
+    text
+}
+
+entity Tag {
+    id [PK]
+    --
+    name
+}
+
+entity PostTagRelation {
+    post_id
+    tag_id
+}
+
+Post ||--o{ PostTagRelation
+Tag ||--o{ PostTagRelation
+
+@@@enduml
