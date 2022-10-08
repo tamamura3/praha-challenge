@@ -9,34 +9,7 @@
 
 ![](db8.png)
 
-## SQL
--- 漫画一覧と各コメントを取得  
-SELECT   
- manga.id,  
- manga.name,  
- comment.text  
-FROM manga   
-LEFT JOIN manga_comment  
-on manga.id = manga_comment.manga_id  
-LEFT JOIN comment  
-on manga_comment.comment_id = comment.id;  
-
--- 結果  
--- # id, name, text  
--- '1', 'HUNTER HUNTER', 'It\'s the best'  
--- '2', 'JOJO', 'It\'s okay'  
--- '2', 'JOJO', 'I want beer'  
--- '3', 'NARUTO', NULL  
-
--- 小説をすべて検索  
-select * from novel;  
-
--- 結果  
--- # id, name  
--- '1', 'Harry Potter'  
--- '2', 'Mujuryoku Piero'  
--- '3', 'The Lord of the Rings'  
-
+- SQLクエリはquery.sqlを参照
 
 # 課題3
 - レビューサイトで、最初は音楽アルバムだけのレビューを扱っていたが、途中から映画や劇などもレビューするようになった。
