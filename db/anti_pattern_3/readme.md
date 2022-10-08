@@ -7,7 +7,7 @@
 - 本とコメントの関係を保持する中間テーブルを用意する
     - 中間テーブルの各idの参照先が一つのテーブルになるように、MangaCommentとNovelCommentという2つのテーブルを作成
 
-![](db8.png)
+![](anti_pattern_3.png)
 
 - SQLクエリはquery.sqlを参照
 
