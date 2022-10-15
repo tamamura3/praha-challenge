@@ -9,6 +9,7 @@
     - 面談
     - 制約
 
+![](anti_pattern_5_1.png)
 ```puml
 @@startuml
 
