@@ -99,3 +99,7 @@ message }|--o{ closure
 
 # 課題3
 - ツリー構造の組織図をリレーショナルデータベースで表現する場合。組織テーブルですべての組織を管理し、parentカラムで親にあたる組織のidを保持するよう設計し、アンチパターンに陥る。
+
+# 参考
+http://www.flint.jp/blog/?entry=130
+https://www.ritolab.com/entry/235
