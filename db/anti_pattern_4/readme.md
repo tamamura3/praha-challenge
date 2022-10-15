@@ -1,6 +1,7 @@
 # 課題1
 - ツリー構造をリレーショナルデータベースで表現する
 ## 方法1 ナイーブツリー
+![](anti_pattern_4_1.png)
 ```puml
 @startuml
 entity message{
@@ -29,6 +30,7 @@ entity message{
     - 削除するノードの子ノードの親idをあらかじめ更新してから、削除が必要
 ## 方法2 閉包テーブル
 
+![](anti_pattern_4_2.png)
 ```puml
 @startuml
 entity message {
@@ -58,6 +60,7 @@ message }|--o{ closure
     - 挿入する位置の祖先をすべて取得してから、祖先の数だけレコード挿入が必要
 - ツリー構造のまま取得できない
     - 例えばあるノード配下をすべて取得した場合、起点のノードに紐づく子ノード一覧が取れるが、それぞれの子ノードがどの階層にいるかの情報はない。そのため一つの取得クエリだけでツリー構造が作れない。これに対応するには、closureテーブルにoffsetのようなカラムを作り、親要素からどれくらい離れているかを保持する情報も一緒に取得する
+![](anti_pattern_4_3.png)
 ```puml
 @startuml
 title 改良版
@@ -78,7 +81,7 @@ message }|--o{ closure
 # 課題2
 - 閉包テーブルを作成する
     - すべての親子関係を閉包テーブルで管理することで、上記の問題を解決する。
-    
+![](anti_pattern_4_4.png)
 ```puml
 @startuml
 entity message {
