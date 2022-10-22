@@ -13,16 +13,25 @@
 - 削除の種類が増えた場合に対応できない
     - 例えば、ユーザーによる削除、ユーザー管理者による削除、サービス提供側による削除など種類を設けたい場合、それができない
     - それぞれの削除に合わせてフラグを追加すると、テーブルが煩雑になる
+- 退会した日時が分からない
+    - これは削除テーブルを作れば対応できる
+```mermaid
+erDiagram
+deleted_student {
+id int
+student_id int
+deleted_at timestamp
+}
+```
 
 ## 方法2：削除を含むステータスを持たせる
 - statusカラムを追加し、0:有効、1:一時無効、2:削除済み、のようにステータスを持たせる
 ### メリット
 - 削除以外の状態にも対応できる
     - 削除を状態の一部として持たせているので、他の状態にも対応できる
-- 他方法1と同じ
+- 他は方法1と同じ
 ### デメリット
-- テーブルselect時にstatusの判定が必要になる
-    - Studentテーブルで有効なデータをselectする時に、status常に条件に入れる必要がある
+- 削除の種類に対応できる点を除けば、方法1と同じ
  ## 方法3：削除テーブルに移す
 - 削除したデータはdeleted_studentのような削除されたデータ専用のテーブルに移す
 ### メリット
@@ -35,22 +44,41 @@
 # 課題2
 - ユーザーが退会済みかどうか判断したいのは、退会したユーザーのデータを何らかのために残しておきたいという目的があると想定
 - その場合、ユーザーデータに情報を付加することで実現できる。課題1の方法3のようにデータを別の場所に移動する方法もあるが、運用コストが高いため今回はなしとする
-- studentの状態を持つstatusテーブルを作成
+- studentの状態を持つstatusテーブルとその履歴を残すstatus_historyテーブルを作成。status_historyは退会日時が分かるようにするため
 - 削除フラグを持たせる方法は不採用。理由は「休会中」のようなステータスが将来的に出てきた場合にそのたびにフラグ追加が必要になるため
+
 ```mermaid
 erDiagram
     student {
     id varchar
     name varchar
-    status_id int FK
+    }
+    status_history {
+        id varchar FK
+        status_id int FK
+        created_at timestamp
     }
     status {
-        id varchar
+        id int
         name varchar
     }
-    student }o--|| status : has
+    student ||--o{ status_history: ""
+    status_history }o--|| status: ""
 ```
-
+- 削除だけを考えるなら、statusテーブルは不要で削除履歴テーブルを作成する方法でも良いと思う
+```mermaid
+erDiagram
+student {
+    id varchar
+    name varchar
+}
+deleted_student {
+    id int
+    student_id int
+    deleted_at timestamp
+}
+student ||--o| deleted_student : ""
+```
 # 課題3
 ## ECサイトのケース
 - 注文取り消しの取り消しが対応できない
