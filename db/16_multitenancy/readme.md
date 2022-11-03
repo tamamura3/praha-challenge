@@ -8,7 +8,7 @@ Saasなど無関係な複数のユーザーが使用するサービスおいて�
     - current_user（現在のユーザー名）と各テーブルのテナントIDカラムを比較するようなポリシーを作れば良さそう
     - そのためにはテナントIDカラムを各テーブルに作る必要がある
     - 詳細は課題3を参照  
-    
+
     https://aws.amazon.com/blogs/database/multi-tenant-data-isolation-with-postgresql-row-level-security/
 - DBアクセス時に参照・作成・更新・削除に自動的にテナントIDのチェックを入れるようにする
     - 例えばO/Rマッパーなどで実現できるらしいが詳細まで見れていない
@@ -21,12 +21,13 @@ Saasなど無関係な複数のユーザーが使用するサービスおいて�
 
 デメリット
 - スケーリングのコストが高い
-テナント数＝DB数なので、テナントが急増した時など管理コストがかかる
+    - テナント数＝DB数なので、テナントが急増した時など管理コストがかかる
   
 https://docs.aws.amazon.com/ja_jp/wellarchitected/latest/saas-lens/silo-isolation.html
 ## テナントごとにスキーマを分割する
 メリット
 - 他2つの中間の特徴を持つ
+    - 前の方法に比べ、テナントごとにデータベースを作成するコストはかからないいなど。
 
 デメリット
 - 他テナントのデータにアクセスするセキュリティリスク
@@ -44,14 +45,14 @@ https://docs.aws.amazon.com/ja_jp/wellarchitected/latest/saas-lens/bridge-model.
 
 https://docs.aws.amazon.com/ja_jp/wellarchitected/latest/saas-lens/pool-isolation.html
 
-https://www.sentryone.com/blog/multi-tenancy-with-sql-server-part-2-approaches
+https://www.sentryone.com/blog/multi-tenancy-with-sql-server-part-2-approaches  
 https://learn.microsoft.com/ja-jp/azure/azure-sql/database/saas-tenancy-app-design-patterns?view=azuresql
 
 ## PostgreSQLのRow Level Securityとは？
 PostgreSQL Row Level Security(RLS)はテーブルの行レベルでユーザーのアクセスを制御する機能。
 利用例としては、複数ユーザーのデータが同じテーブル存在する場合（マルチテナントで全てのデータを同じスキーマで扱うパターンなど）に、関係のないデータにユーザーがアクセスできないよう制限するために使うことができる。
 
-以下に公式サイトから引用したコードを載せる。
+以下に公式サイトから引用したコードを載せる。  
 https://www.postgresql.jp/document/9.6/html/ddl-rowsecurity.html
 
 次の例では、まずpasswdテーブルに対してRLSを有効化している。
