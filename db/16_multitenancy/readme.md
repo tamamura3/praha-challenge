@@ -1,10 +1,15 @@
 # 課題1
-## 前提：マルチテナントとは？
-Saasなど複数企業で使われるサービスにおいて、一つのWeb/DBサーバーを複数のユーザーが共有する方法のこと。
-テナント間でコンテクストが分離されている。
+## 基礎知識：マルチテナントとは？
+Saasなど無関係な複数のユーザーが使用するサービスおいて、一つのWeb/DBサーバーを複数のユーザーで共有すること。
+テナント間でコンテクストが分離されているので、各テナントは自身のデータにしかアクセスができない。
 
 ## where句のつけ忘れをどうやったら防げたか
 - PostgreSQLのRow Level Securityを利用する
+    - current_user（現在のユーザー名）と各テーブルのテナントIDカラムを比較するようなポリシーを作れば良さそう
+    - そのためにはテナントIDカラムを各テーブルに作る必要がある
+    - 詳細は課題3を参照  
+    
+    https://aws.amazon.com/blogs/database/multi-tenant-data-isolation-with-postgresql-row-level-security/
 - DBアクセス時に参照・作成・更新・削除に自動的にテナントIDのチェックを入れるようにする
     - 例えばO/Rマッパーなどで実現できるらしいが詳細まで見れていない
 
@@ -43,14 +48,15 @@ https://www.sentryone.com/blog/multi-tenancy-with-sql-server-part-2-approaches
 https://learn.microsoft.com/ja-jp/azure/azure-sql/database/saas-tenancy-app-design-patterns?view=azuresql
 
 ## PostgreSQLのRow Level Securityとは？
-PostgreSQL Row Level Security(RLS)は特定のテーブルに対してユーザーごとに実行可能な操作を制限できる仕組み。
+PostgreSQL Row Level Security(RLS)はテーブルの行レベルでユーザーのアクセスを制御する機能。
+利用例としては、複数ユーザーのデータが同じテーブル存在する場合（マルチテナントで全てのデータを同じスキーマで扱うパターンなど）に、関係のないデータにユーザーがアクセスできないよう制限するために使うことができる。
 
-次の例では、passwdテーブルに対してRLSを有効化している。
-public（一般ユーザー）には特定の列のselectと、自身の行（passwd.user_nameが自身のユーザー名）だけのupdateを許可している。
-admin（管理者）はすべてのCRUD全てを許可している。
-
-以下公式サイトから引用
+以下に公式サイトから引用したコードを載せる。
 https://www.postgresql.jp/document/9.6/html/ddl-rowsecurity.html
+
+次の例では、まずpasswdテーブルに対してRLSを有効化している。
+そしてpublicユーザー（一般）には特定の列のselectと、自身の行（passwd.user_nameが自身のユーザー名）だけのupdateを許可している。
+adminユーザー（管理者）はすべてのCRUD全てを許可している。
 ```sql
 -- passwdファイルに基づく簡単な例
 CREATE TABLE passwd (
