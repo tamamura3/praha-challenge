@@ -38,10 +38,11 @@ erDiagram
 # 課題2
 ```mermaid
 erDiagram
-    student }o--|| status : has
+    student }o--|| status : ""
     student {
         id varchar PK
         name varchar
+        status_id FK
     }
     status {
         id int PK
