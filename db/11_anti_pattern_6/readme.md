@@ -42,7 +42,7 @@ erDiagram
     student {
         id varchar PK
         name varchar
-        status_id FK
+        status_id int FK
     }
     status {
         id int PK
