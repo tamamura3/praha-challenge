@@ -19,7 +19,7 @@ Book }|--|| Author: ""
 - 親テーブルを誤って削除してしまう可能性がある
     - 親テーブルが消えると、子テーブルは存在しない親のデータを参照し続けることになるので、データの整合性が保てなくなる
 
-## 外部キー制約を定義することの問題点
+## 外部キー制約を定義する場合の問題点
 - 親データを削除する場合は先に子データを削除する必要がある
     - 子→親と順番に削除しないとエラーになってしまうので、注意が必要
 
@@ -40,3 +40,69 @@ Book }|--|| Author: ""
 - SET DEFAULT
     - この設定をするとテーブルを作成できない
     - 使用例：不明。
+
+## 以下のケースでon delete cascadeがあることの問題はなにか？
+```sql
+-- 社員
+create table Employee (
+    id int primary key,
+    name varchar(255),
+    department_id int,
+    foreign key (department_id) references Department (id) on delete cascade
+);
+-- 部署
+create table Department (
+    id int primary key,
+    name varchar(255)
+);
+```
+- on delete cascadeは参照先が削除された場合、紐づく参照元レコードを自動的に削除する
+- そのため、部署を削除した場合、紐づく社員が削除されてしまう
+    - 社員は部署と共に消えるわけではなく、他の部署に異動など、その後も存在し続けることが期待結果と思われるので、期待と異なるリスクがある
+
+## 以下のケースでon delete set nullがあることの問題はなにか？
+```sql
+-- 案件
+create table Issue (
+    id int primary key,
+    name varchar(255),
+    assignee_id int,
+    foreign key (assignee_id) references Assignee (id) on delete set null
+);
+-- 担当者
+create table Assignee (
+    id int primary key,
+    name varchar(255)
+);
+```
+- on delete set nullは参照先が削除された場合、紐付く参照元レコードの外部キーカラムをnullにする
+- そのため、担当者が削除された場合に、誰にもアサインされていない案件が発生していしまう
+    - 案件には必ず担当者が任命されなければいけないので、期待結果と異なるリスクがある
+## Prismaのデフォルトの参照アクション
+deleteの場合、外部キーカラムがnull許容の場合はSetNullがデフォルト、null許容でない場合はRestrictがデフォルトになる。
+updateの場合、null許容に関わらずCascadeがデフォルトになる。
+つまり、デフォルトの状態ではdeleteで参照元データが消えるということはない。
+
+| Clause   | Optional relations	| Mandatory relations |
+| -------- | ------------------ | --------------------|
+| onDelete | SetNull            | Restrict |
+| onUpdate | Cascade            | Cascade |
+https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-actions#referential-action-defaults
+
+
+## TypeORMのデフォルトの参照アクション
+deleteの場合、デフォルトの記述はドキュメントで見つからなかった。
+updateの場合、デフォルトではcascadeにはならないとのこと。そのためrestrictになる可能性が考えられる。
+
+## MySQLとPostgreSQLでのrestrictとno actionの違い
+restrict
+- 標準の設定。親テーブルの更新・削除を拒否する
+- MySQLでもPostgreSQLでも同じ
+no action
+- 親テーブルの更新・削除を拒否する。SQL標準のキーワード。
+- MySQLではrestrictと一緒。PostgreSQLではrestrictの制約に加え、遅延チェックが有効になるという違いがある
+
+# 課題3
+文字列型のカラムを外部キーにした場合、どんな問題があるか？
+PostgreSQLでrestrictではなくno actionを指定する場合、具体的にどんなことをしたいケースが考えられるか？
+課題2の社員と部署のモデルの場合、updateの参照アクションは何を設定するのが良いか？
