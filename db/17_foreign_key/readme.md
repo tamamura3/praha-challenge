@@ -103,6 +103,23 @@ no action
 - MySQLではrestrictと一緒。PostgreSQLではrestrictの制約に加え、遅延チェックが有効になるという違いがある
 
 # 課題3
-文字列型のカラムを外部キーにした場合、どんな問題があるか？
-PostgreSQLでrestrictではなくno actionを指定する場合、具体的にどんなことをしたいケースが考えられるか？
-課題2の社員と部署のモデルの場合、updateの参照アクションは何を設定するのが良いか？
+## PostgreSQLでrestrictではなくno actionを指定する場合、具体的にどんなことをしたいケースが考えられるか？
+- no actionだと外部キーのチェックがクエリ実行時でなくコミット時になる。そのため、親子にデータをinsertするとき、一度親を削除して別の親に子を付け替えるときなどにクエリの実行順を気にしなくてよくなるので使用できる。
+## 課題2の社員と部署のモデルの場合、updateの参照アクションは何を設定するのが良いか？
+- on delete cascade on update cascadeが良さそう
+    - on deleteについては、部署の削除で社員が消えるのは想定外のケースが多いと思うのでcascadeややめた方が良いと考える。そのため、restrictで親の削除を禁止するか、set nullで部署をnullにして社員が残るのが良い。どちらがいいかはケースによる。
+    - on updateについては、部署のidを変更しても問題はなさそうなのでcascadeで良さそう。
+```sql
+-- 社員
+create table Employee (
+    id int primary key,
+    name varchar(255),
+    department_id int,
+    foreign key (department_id) references Department (id) on delete restrict on update cascade
+);
+-- 部署
+create table Department (
+    id int primary key,
+    name varchar(255)
+);
+``` 
