@@ -12,7 +12,7 @@ SQLの論理体系はtrue、false、unknownの3値論理と呼ばれている。
 SQLが3値なのはNULLが原因であり、リレーショナルデータベースにNULLを持ち込んだため、unknownという3つめの値が必要になったという背景がある。  
 
 データベースにおけるNULLは値がない状態であり、trueにもfalseにもなり得るという扱いで、unknownで表現する。  
-例えNULL同士を比較してもtureにはならない。なぜならNULLはtrueにもfalseにもなり得るので、値が決まっていない以上比較のしようがないから。  
+NULL同士を比較してもtureにはならない。なぜならNULLはtrueにもfalseにもなり得るので、値が決まっていない以上比較のしようがないから。  
 
 プログラミング言語でNULLの比較ができるのは、例えばC言語においてはNULLが定数として定義されているため。
 
@@ -66,6 +66,8 @@ Issue {
 }
 Assignee |o--o{ Issue:""
 ```
+assigned_to_idにNOT NULL制約をつける。
+alter table Issue alter column assigned_to_id int NOT NULL;
 
 # 課題3
 BOOLEANならFALSE
