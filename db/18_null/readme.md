@@ -113,3 +113,6 @@ alter table Issue alter column assigned_to_id int NOT NULL;
 # 課題4
 ## ソートするカラムにNULLが含まれていた場合、どのような並び順になるか
 NULLは一番最後に出力される。
+
+参考：
+https://stackoverflow.com/questions/4336687/how-can-i-avoid-nulls-in-my-database-while-also-representing-missing-data
