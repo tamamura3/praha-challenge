@@ -53,6 +53,8 @@ NULL IS NOT NULL
 -- 結果は「0」（FALSE）
 
 # 課題2
+次のモデルでは、Issue.assigned_to_idがNULL許容である。
+これを修正してIssueがNULLを含まないようにする。
 ```mermaid
 erDiagram
 Assignee {
@@ -66,8 +68,30 @@ Issue {
 }
 Assignee |o--o{ Issue:""
 ```
-assigned_to_idがnullのレコードが作成されないように、NOT NULL制約をつける。
 
+方法1：Assignテーブルを作成する
+```mermaid
+erDiagram
+Assignee {
+    id int PK
+    name varchar 
+}
+Issue {
+    id int PK
+    text varchar 
+}
+Assign {
+    assignee_id int FK
+    Issue_id int FK
+}
+Assignee |o--o{ Assign:""
+Issue |o--o{ Assign:""
+```
+Assignテーブルでアサイン状態を管理することで、
+もしIssueにAssigneeがいなければレコードが存在しないだけなので、
+NULLが発生することはない。
+
+方法2：assigned_to_idにNOT NULL制約をつける。
 ```sql
 alter table Issue alter column assigned_to_id int NOT NULL;
 ```
@@ -87,4 +111,5 @@ alter table Issue alter column assigned_to_id int NOT NULL;
 あとは仕様上にNULLであってほしくないカラム（例：銀行の残高）はNULLを避けるべきだと思う。
 
 # 課題4
-NULLに関するクイズ
+## ソートするカラムにNULLが含まれていた場合、どのような並び順になるか
+NULLは一番最後に出力される。
