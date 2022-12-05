@@ -69,7 +69,7 @@ Issue {
 Assignee |o--o{ Issue:""
 ```
 
-方法1：Assignテーブルを作成する
+方法：Assignテーブルを作成する
 ```mermaid
 erDiagram
 Assignee {
@@ -91,11 +91,6 @@ Assignテーブルでアサイン状態を管理することで、
 もしIssueにAssigneeがいなければレコードが存在しないだけなので、
 NULLが発生することはない。
 
-方法2：assigned_to_idにNOT NULL制約をつける。
-```sql
-alter table Issue alter column assigned_to_id int NOT NULL;
-```
-
 
 # 課題3
 カラムごとに妥当なデフォルト値であれば問題ない。
@@ -111,8 +106,10 @@ alter table Issue alter column assigned_to_id int NOT NULL;
 あとは仕様上にNULLであってほしくないカラム（例：銀行の残高）はNULLを避けるべきだと思う。
 
 # 課題4
-## ソートするカラムにNULLが含まれていた場合、どのような並び順になるか
+- ソートするカラムにNULLが含まれていた場合、どのような並び順になるか?
+
 NULLは一番最後に出力される。
+
 
 参考：
 https://stackoverflow.com/questions/4336687/how-can-i-avoid-nulls-in-my-database-while-also-representing-missing-data
