@@ -1,5 +1,5 @@
 # 課題2
-https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/\_\_tests__/functions.test.ts'
+https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/__tests__/functions.test.ts'
 # 課題3
 ## 依存性の注入について
 プログラムが外部のリソース（DB、APIなど）に依存している場合、外部のリソースの実行結果により、プログラムの実行結果が変化してしまう。  
