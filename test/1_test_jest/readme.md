@@ -20,6 +20,7 @@ https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/__
 ## sumOfArrayの修正
 reduceの初期値に0を与え、空の配列の場合は0を返すように修正。
 併せてテストの期待値を0で比較するように修正。
+https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/functions.ts
 
 ## Property Based testingとは
 Property Based Testingは専用のツールを使用してより網羅的にテストをする仕組み。
