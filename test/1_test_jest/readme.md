@@ -1,35 +1,92 @@
 # 課題2
-https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/__tests__/functions.test.ts'
+テストファイル
+https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/__tests__/functions.test.ts
+
+### ビルドエラーになる場合について
+ビルド時にエラーになるケースは、ビルド時にエラー検知できるためテスト不要だと思う。
+
 # 課題3
-## 依存性の注入について
-プログラムが外部のリソース（DB、APIなど）に依存している場合、外部のリソースの実行結果により、プログラムの実行結果が変化してしまう。  
-例えば、プログラムの中でDBからの取得処理がある場合、データが違えば、実行結果が成功にも失敗にもなることがある。そうするとテスト結果が安定しないので、カバレッジ100%のテストが作れなくなる。
+## 元の関数がカバレッジ100%のテストを書けなかった理由
+関数の中で別のオブジェクトに依存しているため。
+Databaseオブジェクトのsaveメソッドは外部と通信する処理のため、常に成功するとは限らない。
+そのため関数自体の結果を事前に決定できないため、カバレッジ100%のテストが書けなかった。
 
-この問題を解決するには、外部リソースの処理を疑似的に作成し結果を固定する方法がある。それをテストしたい関数に引数で渡すなどして利用することで、外部依存部分の結果を安定させ、結果的にテスト結果も安定するのでカバレッジ100%のテストが書ける。
+## 依存性の注入とはなにか？どのような問題を解決するか
+依存性の注入は、あるオブジェクトや関数が、依存する別のオブジェクトや関数を受け取るデザインパターンのこと。
+依存している部分を外部から渡す（注入）ことで、対象オブジェクトや関数の依存性をなくし、疎結合なプログラムを作ることができる。
 
-このように外から外部依存部分を渡す方法を「依存性の注入」という。
-依存性の注入を行うと、モジュール同士の結合度が弱くなる。
+参考：モック化の基礎
+https://medium.com/@rickhanlonii/understanding-jest-mocks-f0046c68e53c
 
-## 外部サービスとの通信
-単体テストで外部サービスと通信が発生すると、テスト結果が外部サービスの実行結果に依存してしまう。
-そうすると、テスト結果が安定しないので、カバレッジ100%のテストが書けなくなる。例えば一時的に外部サービスが止まっていて、製品コードが問題ないのにテストが失敗するなど。
+今回のような外部依存している関数でカバレッジ100%のテストをするには、以下3つの方法があるように思う。
 
-そのため、単体テストでは外部サービスとの通信を避けた方が良い。
+1. 依存性の注入を利用
+依存しているクラスを模したクラスを作成。
+テスト対象関数の引数を増やし、作成したクラスを受け取るようにする。
+
+```TypeScript
+describe('asyncSumOfArraySometimesZero', () => {
+    test('配列の要素の合計値がDBに登録後、返却される', async (): Promise<void> => {
+        const databaseValid: Database = new DatabaseValid();
+        expect(await asyncSumOfArraySometimesZero([1, 1], databaseValid)).toBe(2);
+    });
+    test('DBの登録に失敗すると0を返却する', async (): Promise<void> => {
+        const databaseError: Database = new DatabaseError();
+        expect(await asyncSumOfArraySometimesZero([1, 1], databaseError)).toBe(0);
+    });
+});
+```
+参考：依存性の注入について
+https://www.w2solution.co.jp/tech/2021/10/06/eg_ns_rs_izonseinotyunyu/#:~:text=%E4%BE%9D%E5%AD%98%E6%80%A7%E3%81%AE%E6%B3%A8%E5%85%A5%E3%81%A8%E3%81%84%E3%81%86,%E8%A7%A3%E6%B1%BA%E3%81%99%E3%82%8B%E3%80%8D%E3%81%A8%E3%81%84%E3%81%86%E3%81%93%E3%81%A8%E3%81%A7%E3%81%99%E3%80%82
+
+2. Mockを利用
+依存しているクラスの関数をモック化し、対象の関数の処理を上書きする。
+```Typescript
+describe('asyncSumOfArraySometimesZero', () => {
+    test('配列の要素の合計値がDBに登録後、返却される', async (): Promise<void> => {
+        const databaseMock = jest.spyOn(DatabaseMock.prototype, 'save').mockReturnValue();
+        expect(await asyncSumOfArraySometimesZero([1, 1])).toBe(2);
+        databaseMock.mockRestore();
+    });
+    test('DBの登録に失敗すると0を返却する', async (): Promise<void> => {
+        const databaseMock = jest.spyOn(DatabaseMock.prototype, 'save').mockImplementation(() => { throw new Error() });
+        expect(await asyncSumOfArraySometimesZero([1, 1])).toBe(0);
+        databaseMock.mockRestore();
+    });
+});
+```
+モック化には、他にもクラスごとモック化したり、関数をモック化する方法もある。
+今回の場合クラスの一部（save関数）だけをモック化すればいいので、上記を使用。
+
+参考：モック化の種類について
+https://qiita.com/yuma-ito-bd/items/38c929eb5cccf7ce501e
+
+3. 依存性の注入とMock
+依存しているクラスをモック化し、対象の関数を上書きする。テスト対象関数の引数を増やし、作成したモックを受け取るようにする。
+
+
+
+## 依存性の注入を実施することで結合度の強さはどのように変化するか
+疎結合になるので、結合度は低くなる。
+
+## 単体テストで外部サービスとの通信が発生するデメリット
+単体テストで外部サービスと通信が発生すると、テスト結果が外部サービスの実行結果に依存するため、カバレッジ100%のテストが書けなくなる。
 外部サービスを動かしてプログラム全体をテストするのは統合テストのような後ろのフェーズでよいと考える。
 
 ## sumOfArrayの修正
-reduceの初期値に0を与え、空の配列の場合は0を返すように修正。
-併せてテストの期待値を0で比較するように修正。
-https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/functions.ts
+空の配列の場合は0を返すように修正。
+https://github.com/tamamura3/praha-challenge-templates/blob/09a4a7756a30a2364109619cc873b2fa10129388/jestSample/functions.ts#L5-L7
 
-## Property Based testingとは
+## Property Based testingとは何か？使わない方が良いケースはあるか？
 Property Based Testingは専用のツールを使用してより網羅的にテストをする仕組み。
-例えば「一つの自然数」という性質（property）を定義すれば、性質に当てはまるありとあらゆる入力値が自動的に作成されテストされる。（1、33、738470107など）
-その入力値をテスト対象の関数に渡してテストすれば、人より網羅的にテストができ、コード品質の向上に繋がる。
+例えば「一つの自然数」という性質（property）を定義すれば、その性質に当てはまるありとあらゆる入力値が自動的に作成される。（1、33、738470107など）
+その入力値をテスト対象の関数に渡してテストすれば、人力では取りこぼしやすいエッジケースなどを含めより手厚いテストができる。
 
-反対にExample Based Testingという言葉があり、これは多くの人がいつもやっている、数ある入力値からいくつかを選出してテストする方法。
+Property Based Testingを使わない方が良いケースがあるとすれば、一回の実行に時間がかかる処理。
+自動で何度もテストされるため、完了までに時間がかかる懸念がある。
 
-Property Based Testingを使用しない方が良いケースがあるとすれば、一回の実行に時間がかかる処理が考えられる。
+## Example Based Testingとは何か
+Property Based Testingのとは反対で、数ある入力値から人が選出してテストする方法。
 
 ## 単体テストでの工夫
 - Arrenge-Act-Assert
