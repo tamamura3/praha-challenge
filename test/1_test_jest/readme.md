@@ -1,9 +1,9 @@
 # 課題2
-テストファイル
+記載したテスト
 https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/__tests__/functions.test.ts
 
 ### ビルドエラーになる場合について
-ビルド時にエラーになるケースは、ビルド時にエラー検知できるためテスト不要だと思う。
+ビルド時にエラーになるケースは、ビルド時にエラー検知できるためテスト不要だと考える。
 
 # 課題3
 ## 元の関数がカバレッジ100%のテストを書けなかった理由
@@ -24,23 +24,48 @@ https://medium.com/@rickhanlonii/understanding-jest-mocks-f0046c68e53c
 依存しているクラスを模したクラスを作成。
 テスト対象関数の引数を増やし、作成したクラスを受け取るようにする。
 
+実装イメージ（課題のasyncSumOfArraySometimesZeroを利用）
+`functions.test.ts`
 ```TypeScript
 describe('asyncSumOfArraySometimesZero', () => {
     test('配列の要素の合計値がDBに登録後、返却される', async (): Promise<void> => {
+        // 常に成功するデータベース登録処理を追加
         const databaseValid: Database = new DatabaseValid();
+        // 引数を一つ増やして、受け取ったオブジェクトでsaveメソッドを呼び出す
         expect(await asyncSumOfArraySometimesZero([1, 1], databaseValid)).toBe(2);
     });
     test('DBの登録に失敗すると0を返却する', async (): Promise<void> => {
+        // 常に失敗するデータベース登録処理を追加
         const databaseError: Database = new DatabaseError();
+        // 引数を一つ増やして、受け取ったオブジェクトでsaveメソッドを呼び出す
         expect(await asyncSumOfArraySometimesZero([1, 1], databaseError)).toBe(0);
     });
 });
 ```
-参考：依存性の注入について
-https://www.w2solution.co.jp/tech/2021/10/06/eg_ns_rs_izonseinotyunyu/#:~:text=%E4%BE%9D%E5%AD%98%E6%80%A7%E3%81%AE%E6%B3%A8%E5%85%A5%E3%81%A8%E3%81%84%E3%81%86,%E8%A7%A3%E6%B1%BA%E3%81%99%E3%82%8B%E3%80%8D%E3%81%A8%E3%81%84%E3%81%86%E3%81%93%E3%81%A8%E3%81%A7%E3%81%99%E3%80%82
+`index.ts`
+```Typescript
+export interface Database {
+  save(numbers: number[]): void;
+}
+
+export class DatabaseValid implements Database {
+  public save(numbers: number[]): void {
+    // do nothing
+  }
+}
+
+export class DatabaseError implements Database {
+  public save(numbers: number[]): void {
+    throw new Error();
+  }
+}
+```
 
 2. Mockを利用
 依存しているクラスの関数をモック化し、対象の関数の処理を上書きする。
+
+実装イメージ（課題のasyncSumOfArraySometimesZeroを利用）
+`functions.test.ts`
 ```Typescript
 describe('asyncSumOfArraySometimesZero', () => {
     test('配列の要素の合計値がDBに登録後、返却される', async (): Promise<void> => {
@@ -56,14 +81,44 @@ describe('asyncSumOfArraySometimesZero', () => {
 });
 ```
 モック化には、他にもクラスごとモック化したり、関数をモック化する方法もある。
-今回の場合クラスの一部（save関数）だけをモック化すればいいので、上記を使用。
+今回の場合クラスの一部（save関数）だけをモック化すればいいので、spyOnを使用。
 
 参考：モック化の種類について
 https://qiita.com/yuma-ito-bd/items/38c929eb5cccf7ce501e
 
-3. 依存性の注入とMock
+3. 依存性の注入とMockを利用
 依存しているクラスをモック化し、対象の関数を上書きする。テスト対象関数の引数を増やし、作成したモックを受け取るようにする。
 
+実装イメージ（課題のasyncSumOfArraySometimesZeroを利用）
+`functions.test.ts`
+```typescript
+// ファイル内の全ての関数、クラスをモック化
+jest.mock('../util/index');
+// TypeScriptでは型変換が必要
+const databaseMock = DatabaseMock as jest.Mock;
+
+describe('asyncSumOfArraySometimesZero', () => {
+    test('配列の要素の合計値がDBに登録後、返却される', async (): Promise<void> => {
+        databaseMock.mockImplementation(() => {
+            return { save: jest.fn() }
+        })
+        expect(await asyncSumOfArraySometimesZero([1, 1], databaseMock)).toBe(2);
+        databaseMock.mockRestore();
+    });
+    test('DBの登録に失敗すると0を返却する', async (): Promise<void> => {
+        databaseMock.mockImplementation(() => {
+            return {
+                save: jest.fn(() => {
+                    throw new Error();
+                })
+            }
+        });
+        expect(await asyncSumOfArraySometimesZero([1, 1], databaseMock)).toBe(0);
+        databaseMock.mockRestore();
+    });
+});
+
+```
 
 
 ## 依存性の注入を実施することで結合度の強さはどのように変化するか
@@ -82,7 +137,7 @@ Property Based Testingは専用のツールを使用してより網羅的にテ�
 例えば「一つの自然数」という性質（property）を定義すれば、その性質に当てはまるありとあらゆる入力値が自動的に作成される。（1、33、738470107など）
 その入力値をテスト対象の関数に渡してテストすれば、人力では取りこぼしやすいエッジケースなどを含めより手厚いテストができる。
 
-Property Based Testingを使わない方が良いケースがあるとすれば、一回の実行に時間がかかる処理。
+Property Based Testingを使わない方が良いケースがあるとすれば、一回の実行に時間がかかる処理が考えられる気がする。
 自動で何度もテストされるため、完了までに時間がかかる懸念がある。
 
 ## Example Based Testingとは何か
@@ -91,16 +146,22 @@ Property Based Testingのとは反対で、数ある入力値から人が選出�
 ## 単体テストでの工夫
 - Arrenge-Act-Assert
 テストコードを3段階に分けてコメントして管理することで、どこで何をしているか、何のテストをしているかを理解しやすくする方法。Arrengeでは入力値や初期化など、テストに必要なデータを準備する。Actでは、関数やAPIなどテスト対象の実行を行う。Assertでは結果を判定する。
-- 一つのユニットテストに複数assertを書かない
-一つのユニットテストで複数のassertを実行すると、エラー時にそれ以降のテストが実行されないので注意。
-- テスト内にロジックを書かない
+- テスト内にロジックを書く場合は注意
 テストの中にロジックを書くと、そのロジックにバグが生まれる可能性があるので、極力避ける。
 if, for, whileなどを使うようであれば注意し、必要であれば複数のテストケースに分ける。
 参考：https://www.simform.com/blog/unit-testing-best-practices/
+- 一つのユニットテストに複数assertを書く場合は注意
+一つのユニットテストで複数のassertを実行すると、エラー時にそれ以降のテストが実行されないので注意。
 
 # 課題4
 ## テストを書いてみよう（関数3つ）
-[functions.ts](https://github.com/tamamura3/praha-challenge/blob/main/test/1_test_jest/functions.ts)、[addressApiService.ts](https://github.com/tamamura3/praha-challenge/blob/main/test/1_test_jest/addressApiService.ts)を参照。
+
+テスト対象の関数
+[taskKanekoFunc.ts](https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/taskKanekoFunc.ts)
+
+
+関数の中で利用するAPIサービス
+[addressApiService.ts](https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/addressApiService.ts)
 
 ## jestに関するクイズ
 1. オブジェクトの等価を判定するmatcharのtoBeとtoEqualの違いは？
@@ -108,10 +169,11 @@ if, for, whileなどを使うようであれば注意し、必要であれば複
 3. 実行結果のFile, Stmts, Branch, Funcs, Lines, Uncoverd Lineはそれぞれ何を意味してる？
 
 # 課題5
-- テストの名前には「～されるかどうか」のようなテスト観点を書くとわかりやすいと感じた。
+- テストの名前には「～されるかどうか」のように期待結果を書くとわかりやすいと感じた。
 例：「[]の配列を引数に渡した場合」×
 　　「空配列の場合0が返却されるかどうか」〇
-- テスト実行前にbeforeEachなどでスナップショットを取り、完了後afterEachでスナップショットを戻せば常に同じ状態で各テストを実行できる
-
-参考：https://github.com/PostHog/posthog
-https://github.com/n8n-io/n8n
+https://github.com/n8n-io/n8n/blob/master/packages/cli/test/unit/ActiveExecutions.test.ts
+- 同一のexpectを何度も行う場合は関数にすると便利
+https://github.com/mobxjs/mobx/blob/4ef8ff3f84ec8ae893d8c84031664ea388d78091/packages/mobx/__tests__/v5/base/errorhandling.js#L9-L16
+- expect.assertionsを呼ぶと、この回数分expectが呼ばれるまでテストが終了しない。非同期で実行途中にも関わらず予期せぬ結果で終了するのを防ぐことができる。
+- テスト前後のスナップショットの取得には、beforeEachとafterEachが利用できる
