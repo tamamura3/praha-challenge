@@ -1,8 +1,16 @@
 # 課題1
-後ほど記載
+下記リポジトリを参照
+https://github.com/tamamura3/react_tutorial
 
 # 課題2
-後ほど記載
+SquareのStory
+https://github.com/tamamura3/react_tutorial/blob/main/src/stories/Square.stories.jsx
+
+PageのStory
+https://github.com/tamamura3/react_tutorial/blob/main/src/stories/Page.stories.jsx
+
+GameのStory
+https://github.com/tamamura3/react_tutorial/blob/main/src/stories/Game.stories.jsx
 
 # 課題3
 Storybookのメリット
