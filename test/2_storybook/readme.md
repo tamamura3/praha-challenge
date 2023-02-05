@@ -6,8 +6,8 @@ https://github.com/tamamura3/react_tutorial
 SquareのStory
 https://github.com/tamamura3/react_tutorial/blob/main/src/stories/Square.stories.jsx
 
-PageのStory
-https://github.com/tamamura3/react_tutorial/blob/main/src/stories/Page.stories.jsx
+BoardのStory
+https://github.com/tamamura3/react_tutorial/blob/main/src/stories/Board.stories.jsx
 
 GameのStory
 https://github.com/tamamura3/react_tutorial/blob/main/src/stories/Game.stories.jsx
@@ -15,9 +15,7 @@ https://github.com/tamamura3/react_tutorial/blob/main/src/stories/Game.stories.j
 # 課題3
 Storybookのメリット
 - アプリを動かさずにUIコンポーネントの作成や変更、確認ができる
-- UIコンポーネントの管理ができるようになる
-Storybookを使う＝UIのドキュメントを作ることになる
-仕様把握、類似のコンポーネント作成の防止などに役立つ。
+- UIコンポーネントの管理ができる。Storybookがドキュメントの役割を果たす
 Storybookのデメリット
 - アプリとStorybookの両方を管理する必要がある
 
@@ -26,6 +24,5 @@ https://levelup.gitconnected.com/why-you-should-always-use-storybook-when-develo
 
 # 課題4
 Storybookに関するクイズ
-Q1: Storybookの画面にあるActionsタブは何か？
-Q2: Storybookの画面にあるInteractionsタブは何か？
-Q3: 
+Q1: Storybookの画面にあるActionsは何か
+Q2: Storybookの画面にあるInteractionsは何か
