@@ -43,7 +43,7 @@ https://www.functionize.com/automated-testing/behavior-driven-development
 https://www.youtube.com/watch?v=4e9vhX7ZuCw&list=PLhW3qG5bs-L_mFHirOLEYJ7X2rIXu8SR2
 
 # 課題2
-下記を参照
+テスト
 https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/__tests__/tdd_practice.test.js
-
-
+コード
+https://github.com/tamamura3/praha-challenge-templates/blob/master/jestSample/script.js
