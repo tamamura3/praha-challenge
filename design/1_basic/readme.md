@@ -236,7 +236,7 @@ setter/getterを用意するだけでは結局外部からデータを参照で�
 - 内部結合
 他のオブジェクトの内部の直接操作するパターン。
 
-## 単一責任の法則の感想
+# 単一責任の法則の感想
 定義が曖昧で結局よく分からなかった(-_-；)
 せっかくなので調べたことを自分の理解と共にメモ。
 
@@ -331,6 +331,6 @@ public class EmployReporter {
 のように二つの変更される理由があるのでNG！と考えることができる。
 しかし実際は報告に関連する処理をまとめているだけなので、同じクラスに存在して良いと思う。
 
-単一原則の法則って分かりにくいよねという記事もあったので参考まで。
-[SRP is a Hoax](https://www.yegor256.com/2017/12/19/srp-is-hoax.html)
+単一原則の法則って分かりにくいよねという記事もあったので参考まで。  
+[SRP is a Hoax](https://www.yegor256.com/2017/12/19/srp-is-hoax.html)  
 [I don't love the single responsibility principle](https://sklivvz.com/posts/i-dont-love-the-single-responsibility-principle)
