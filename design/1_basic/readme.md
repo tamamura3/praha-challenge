@@ -1,35 +1,34 @@
 # 課題1
-## SOLID原則とは（メリットも含めて説明）
+## SOLID原則
 変更に強いソフトウェアを作るための5つの設計原則の頭文字を取った言葉。
 1. Single Responsibility Principle：単一責任の原則
-メリット：修正時の影響範囲を小さく保てる
-
 クラスは一つだけの責務を持つべきであるという原則。ここでの責務というのは、そのクラスを利用するアクターに対する責務を意味する。つまり、各クラスはアクターと1対1で紐づいているべきであるということ。
 
 アクターとは、ソフトウェアを利用するユーザーや役割を指す。
 システムの変更要求はアクターから生まれるため、クラスが複数アクターに対する責務を負っていると、一つの変更が他のアクターのユースケースにも影響してしまう。
 
-参考：https://www.ogis-ri.co.jp/otc/hiroba/others/OOcolumn/single-responsibility-principle.html  
-https://dev.to/abh1navv/how-solid-is-your-code-single-responsibility-principle-4b7l
+[単一責任の原則（Single responsibility principle）について、もう一度考える](https://www.ogis-ri.co.jp/otc/hiroba/others/OOcolumn/single-responsibility-principle.html)
 
 
 2. Open/closed principle：オープン/クロースドの原則
 
-ソフトウェアの構成要素（クラス、関数など）は拡張に対して開かれていて（Open）修正に対して閉じて（closed）いなければならないという原則。つまり、拡張はしやすいが、修正時は既存の成果物を変更する必要がないような設計にするべきということ。
+ソフトウェアの構成要素（クラス、関数など）は拡張に対して開かれていて（Open）修正に対して閉じて（closed）いなければならないという原則。
+つまり、拡張はしやすいが、修正時は既存の成果物を変更する必要がないような設計にするべきということ。
 
-参考：https://zenn.dev/rafael612/articles/5d68b432d219f8
+[SOLID原則 ◆オープン・クローズドの原則◆](https://zenn.dev/rafael612/articles/5d68b432d219f8)
 
 3. Liskov substitution principle：リスコフの置換原則
 
-クラスを継承するときに、スーパークラスとサブクラスを入れ替えても動くようにするべきという原則。is-aの関係が成り立っているからとよく考えずにクラス設計すると、あるサブクラスで矛盾が生まれてしまうことがある。
+クラスを継承するときに、スーパークラスとサブクラスを入れ替えても動くようにするべきという原則。
+is-aの関係が成り立っているからとよく考えずにクラス設計すると、あるサブクラスで矛盾が生まれてしまうことがある。
 
-参考：https://www.membersedge.co.jp/blog/typescript-solid-liskov-substitution-principle/
+[TypeScriptでSOLID原則〜リスコフの置換原則〜](https://www.membersedge.co.jp/blog/typescript-solid-liskov-substitution-principle/)
 
 4. Interface segregation principle：インターフェース分離の原則
 
 インターフェースとその利用者がいるとき、利用者にとって必要のないメソッドやプロパティに依存しなくていいようにインターフェースを分割すべきであるという原則。
 
-参考：https://www.membersedge.co.jp/blog/typescript-solid-interface-segregation-principle/
+[TypeScriptでSOLID原則〜インターフェイス分離の原則〜](https://www.membersedge.co.jp/blog/typescript-solid-interface-segregation-principle/)
 
 5. Dependency inversion principle：依存性逆転の原則
 あるモジュールが別のモジュールを利用するとき、間に共有された抽象（インターフェースや抽象クラスなど）に依存するべきという原則。
@@ -41,7 +40,7 @@ https://dev.to/abh1navv/how-solid-is-your-code-single-responsibility-principle-4
 ## Open-Closed-Principleの例
 [こちら](https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design#open-closed-principle)を参考にした。
 
-円や正方形のような図形の配列を受け取り面積の合計値を出すAreaCaluculatorがある。
+円や正方形のような図形の配列を受け取り面積の合計値を出すAreaCaluculatorがあるとする。
 
 ```Typescript
 class Circle {
@@ -128,7 +127,7 @@ console.log(areaCalculator.sum());
 ```
 
 ## リスコフの置換原則に違反した場合の不都合は？
-原則に違反するということは、適切でないサブクラスが存在するということなので、そのサブクラスを利用した処理の中でバグが発生する可能性がある。
+原則に違反するということは適切でないサブクラスが存在するということなので、そのサブクラスを利用した処理の中でバグが発生する可能性がある。
 
 ## インターフェースを用いることの設計上のメリット
 - クラスをインターフェースに依存させることでクラス関係を抽象化でき、変更時の影響範囲が小さくなるような設計にできる
@@ -137,17 +136,16 @@ console.log(areaCalculator.sum());
 ## 依存性の逆転を用いる必要があるのはどんなとき？
 変更が見込まれるモジュールAに他のモジュールBが依存している場合、モジュールAが変更される度にモジュールBも影響を受けるため、依存性の逆転を使う必要がある。
 
-## デメトルの法則とは（メリットも含めて説明）
+## デメトルの法則とは
 「親クラス.子クラス.子クラスのメソッド」のように、直接のオブジェクトを経由してさらに別のオブジェクトにアクセスするのを避けるべきという法則。
 
 この法則を守ることのメリット。
 - 単体テストがしやすくなる
     - ユニットテストでは自分以外のオブジェクトはモックにして常に同じ値を返すようにしてテストするのが一般的なので、関係するオブジェクトが多いとそれだけモックがたくさん必要になる。
 - コード変更の影響範囲を小さく保つことができる。
-    - 関係するオブジェクトが多いと、それだけあるオブジェクトの変更の影響が及ぶ範囲も多くなる。デメトルの法則で結合度を低く保つことができる。
+    - 関係するオブジェクトが多いと、それだけあるオブジェクトの変更の影響が及ぶ範囲も大きくなる。デメトルの法則で結合度を低く保つことができる。
 
-
-https://qiita.com/br_branch/items/37cf71dd5865cae21401
+[デメテルの法則を厳密に守るにはどうすればいいの？](https://qiita.com/br_branch/items/37cf71dd5865cae21401)
 
 ## 新人が書いたコードについて
 setter/getterを用意するだけでは結局外部からデータを参照できるのでデメトルの法則に対処できているわけではない。
@@ -161,23 +159,21 @@ setter/getterを用意するだけでは結局外部からデータを参照で�
 - 過去の購入履歴を全て取得してからアプリ側で絞り込んでいるので、購入履歴の数によっては性能の問題が発生する
 
 ## コードの修正案
-ユーザーの平均購入履歴数を考慮して性能を満たせる場合は、今のままSQLで全取得してアプリで絞り込む。
+ユーザーの平均購入履歴数を考慮して性能要件を満たせる場合は、今のままで問題なさそう。
 
-性能を満たせない場合は、SQLで絞り込んで、アプリで結果だけ受け取り分岐させる。
+性能要件を満たせない場合は、アプリではなくSQLで商品の絞り込みを行う修正が考えられる。
 
 各仕様変更があった場合の対応どうするか
-- 「1年以内から2年以内」はアプリまたはSQLで絞り込む際の日付部分を変更して対応。
-- 「プレミアム会員の場合は何個でも購入可能」はアプリでこの判定処理自体を通らないよう修正して対応。
-- 「プレミアムは3カ月以内、それ以外は1年以内」という変更が仮にあった場合、SQLで対応する場合はwhere句をバインドできる仕組みが必要。
+- 「1年以内→2年以内」・・アプリまたはSQLで絞り込む際の日付部分を変更して対応。
+- 「プレミアム会員の場合は何個でも購入可能」・・アプリでこの判定処理自体を通らないよう修正して対応。
+- 例えば「プレミアム会員3カ月以内、それ以外は1年以内」という変更が仮にあった場合は、SQLで対応するならwhere句をバインドできる仕組みが必要。
 
 # 課題3
 ## コードの問題点
 - フィールドがpublicなので、意図せず誤った値に更新してしまう恐れがある
 
 ## 解決法
-- クラスをカプセル化するため、フィールドをprivateにしてそれぞれ適切なgetter/setterを設定する。
-    - PersonクラスのnameとstarWorkingAtは途中で変更する必要はないので、getterだけ作成し読み取りだけにする。名前を変更したい場合はそのための関数を作成する。
-    - Companyクラスのpeopleは、リストの追加と削除を行うと想像できるので、それぞれの関数を用意する。getterとsetterは不要。
+- readonlyを付けるか、privateにしてgetterを書く
 
 # 任意課題
 [このスライド](https://fortee.jp/object-oriented-conference-2020/proposal/a826b6c6-167c-4c5c-bfc7-52bb8bc22ec1)がコードの例もありきれいにまとまっていた。
@@ -214,7 +210,8 @@ setter/getterを用意するだけでは結局外部からデータを参照で�
 - 機能的凝集
 一つの固有の機能を実行するモジュール。
 
-https://www.ogis-ri.co.jp/otc/hiroba/technical/Cohesion_Coupling/Cohesion_Coupling.html
+[設計におけるオブジェクトの責務分配に有効なものさし -凝集度と結合度-](https://www.ogis-ri.co.jp/otc/hiroba/technical/Cohesion_Coupling/Cohesion_Coupling.html)
+
 
 ## 結合度（Coupleing）
 モジュール同士がどれだけ依存しているかを示す。
@@ -239,54 +236,101 @@ https://www.ogis-ri.co.jp/otc/hiroba/technical/Cohesion_Coupling/Cohesion_Coupli
 - 内部結合
 他のオブジェクトの内部の直接操作するパターン。
 
+## 単一責任の法則の感想
+定義が曖昧で結局よく分からなかった(-_-；)
+せっかくなので調べたことを自分の理解と共にメモ。
 
-# 感想
-## Single responsibility principle
-SRPについて調べてみたが、定義が曖昧で結局よくわからなかった。
+単一責任の法則とは？
+> The single-responsibility principle (SRP) is a computer programming principle that states that "A module should be responsible to one, and only one, actor."[1] The term actor refers to a group (consisting of one or more stakeholders or users) that requires a change in the module.
+Wikipediaより
 
-1クラスに対して1アクターが紐づけば良いのであれば、例えばテキスト編集と印刷どちらも同じアクター（ユーザー）が行うとしたら次のようなクラスを作れる。
-ただこれは二つの別の概念なのでクラスを分けた方がいいように思う。
+つまり、一つのモジュールは一つのアクターに対する責務だけを持つと良いということ。
+アクターとは、ユーザーや役割を意味する。
 
-```Typescript
-class TextManipulator {
-    private text: string;
+[プログラマが知るべき97のこと](https://xn--97-273ae6a4irb6e2hsoiozc2g4b8082p.com/%E3%82%A8%E3%83%83%E3%82%BB%E3%82%A4/%E5%8D%98%E4%B8%80%E8%B2%AC%E4%BB%BB%E5%8E%9F%E5%89%87/)で紹介されている例を見てみる。
+```
+public class Employee {
+	public Money calculatePay() ...
+	public String reportHours() ...
+	public void save() ...
+}
+```
+このクラスは単一責任の法則に反していて、理由は次の通り3つの異なるアクターに対する責務を負ってしまっているからと考えられる。
+- calculatePay（給与計算をする）のアクターは、会計または経理
+- reportHours（勤務時間報告）のアクターは、人事など
+- save（計算結果を保存）のアクターは、DBAやDB関連の決め事をするエンジニア
 
-    constructor(text: string) {
-        this.text = text;
-    }
-
-    public getText(): string {
-        return this.text;
-    }
-
-    // テキストの編集処理
-    public appendText(newText: string): void {
-        this.text = this.text.concat(newText);
-    }
-
-    // テキストの印刷処理
-    public printText(): void {
-        // 印刷処理
-    }
+そのため記事の中では、それぞれ別のクラスに分ける方法が紹介されている。
+```
+public class Employee {
+	public Money calculatePay() ...
+}
+public class EmployReporter {
+	public String reportHours(Employee e) ...
+}
+public class EmployeeRepository {
+	public void save(Employee e) ...
 }
 ```
 
-では他に定義あるのかと思い調べたら、Agile Software DevelopmentではSRPについて"A class should have only one reason to change"とも書かれているらしい。
-reasonというのは例えば上の例だと「ユーザーのテキスト編集処理を変更したい」「ユーザーのテキスト印刷処理を変更したい」などになると考えられるので、確かにこの定義に沿うと上のクラスを分解することになる。
+こうすることで1アクターの変更が他のアクターの処理に影響することを防げる。これが単一責任のメリット。
+システムの変更要求はアクターから生まれるので、一つのモジュールに紐づくアクターを限定することで、影響範囲を小さくすることができる。
 
-しかし、この定義に沿うと今度は各クラスに1メソッドしか持たせることができなくなる。例えば上の例にclearTextというメソッドがあったら、同じテキストの編集処理なのでappendTextと一緒のクラスに置いても良いと思うが、reason to changeが2つになってしまう？（「ユーザーのテキスト編集処理を変更したい」と「ユーザーのテキスト編集（削除処理）を変更したい」）
+まず思ったのは、アクターという言葉がかなり曖昧な印象。
+極端な話、社員一人だけの会社でこのシステムをその人だけが使っていたらアクターは一人？と思ってしまいそう。実際の利用する人ではなく、あくまでも役割としてアクターを考えることが必要そう。
 
-なのでreason to changeの定義はよくわからないが、アクターが混在しないというルールを気を付ければ良さそう。
-上の例でもし印刷処理は管理ユーザーだけが行うのであれば、アクターが異なるので分けた方が良い、ということになる。
+また、対象がモジュールかクラスか関数なのかでも話が変わってくると思った。
+関数なら一つのアクターだけに紐づけることができそうだが、モジュールやクラスなら難しい場合もあるかと思う。
+例えば共通のユーティリティークラスがあれば、複数のアクターの処理で利用されるので原則に当てはめることは難しそう。
+これには、[この記事](https://www.ogis-ri.co.jp/otc/hiroba/others/OOcolumn/single-responsibility-principle.html)によると「共通ユーザーというアクターがいる」と考えることもできるとのこと。
 
-仮に同じアクターだったとしても、クラスは関連する処理だけを扱うようにすれば（これはSRPと関係ないと思うが）、上の例のような責務が多すぎるクラスを作るのは避けることができると思う。
+他に思ったのは、原則に沿ってアクターが一つなら常に良いシステムが作れるのかというとそうではない。
+例えば経理の仕事は他にも無数にあるので、それらの処理を全て一つのクラスに入れたら神クラスが出来上がってしまう。
+そうすると変更があった場合、アクター間での影響はないが、ユースケース間で変更が影響してしまう。
 
-https://sklivvz.com/posts/i-dont-love-the-single-responsibility-principle
+自分は単一責任の法則と聞いたとき、最初は「処理」の話を思い浮かべた。
+ただ実際は恐らくアクターに対する責務のことであり、処理に対する責務だと考えてしまうと定義が曖昧で理解ができなそう。
+例えば先のEmployeeの例だと、
+- 従業員の処理に関する責務だけを負っているからOK
+- 従業員の給与計算、勤務時間報告、計算結果保存それぞれの処理に責務を負っているのでNG
 
-# dependency inversion principle
-下記記事の例を見たが、これでは依存性逆転の原則のメリットが分からなかった。
-これはインターフェースを用意したというよりかは、validateTypeの処理をfetchUserに移動したからaxiosに変更しても変更が関数1個で収まっていると思う。
+のように、「処理」の粒度により解釈が変わってくる気がする。
+関数であれば処理を一つにできるかもしれないけど、モジュールやクラスでそれをやろうとすると、一つの処理しかない大量のモジュールやクラスが生まれてしまう。
+あくまでアクターに関する責務だという前提が大切そう。
 
-https://www.membersedge.co.jp/blog/typescript-solid-dependency-inversion-principle/
+結論：とりあえずアクターが混在しないように、と気を付ければ良さそう。
+※ただしアクターを考えるのがムズイ
 
+ちなみに単一責任の原理にはもう一つ、定義があるらしい。
 
+> Robert C. Martin, the originator of the term, expresses the principle as, "A class should have only one reason to change".[2] Because of confusion around the word "reason" he has also clarified saying that the "principle is about people."[3] In some of his talks, he also argues that the principle is, in particular, about roles or actors.
+Wikipediaより
+
+つまり、クラスが変更される理由は一つだけとのこと。
+変更される理由というのは、先ほどのEmployeeクラスの例で言うと次のようなものが考えられる。
+
+- 会計部門が給与計算のルールを変更したい
+- 人事が勤務時間報告のルールを変更したい
+- DBAが従業員のデータが格納されているDBのスキーマを変更したい
+
+これもWikipediaにも書いてあるようにアクターの話であることを考えないと理解が難しそう。
+例えば原則に沿って勤務時間報告のクラスに分けて次のような関連処理が含まれる場合、
+```
+public class EmployReporter {
+	public String reportHours(Employee e) ...
+    // 勤務時間報告に必要な計算処理
+	private String calculateHours(int hours) ...
+    // 勤務時間報告に必要な報告先取得処理
+	private String getReportToAddress(Employee e) ...
+}
+```
+もし変更される理由を「処理」に関することだとして考えると、
+- 計算処理（calculateHours）を変更したい
+- 報告先取得処理（getReportHours）を変更したい
+
+のように二つの変更される理由があるのでNG！と考えることができる。
+しかし実際は報告に関連する処理をまとめているだけなので、同じクラスに存在して良いと思う。
+
+単一原則の法則って分かりにくいよねという記事もあったので参考まで。
+[SRP is a Hoax](https://www.yegor256.com/2017/12/19/srp-is-hoax.html)
+[I don't love the single responsibility principle](https://sklivvz.com/posts/i-dont-love-the-single-responsibility-principle)
